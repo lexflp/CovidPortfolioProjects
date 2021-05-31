@@ -183,4 +183,39 @@ where dea.continent is not null
 SELECT * 
 From PercentPopulationVaccinatted
 
---Going to use 
+
+--More Views
+Create View ContinentsDeathCounts as 
+
+Select  
+continent, MAX(cast(Total_deaths as int)) as TotalDeathCount
+From PortfolioProjectCovid..['covid  deaths$']
+--Where location like '%states%'
+where continent is not null
+Group by continent
+--order by TotalDeathCount desc
+
+
+SELECT * FROM ContinentsDeathCounts
+
+
+Create View CountriesInfectionRate as 
+Select  
+location, population, MAX(total_cases) as HighestInfectionCount,  MAX(( total_cases/population))*100 as
+	PercentPopulationInfected
+From PortfolioProjectCovid .. ['covid  deaths$']
+--Where location like '%states%'
+Group by location, population
+--order by PercentPopulationInfected desc
+
+SELECT * FROM CountriesInfectionRate
+
+
+CREATE view TotalCasesvsTotaldeaths as
+Select  
+location, date, total_cases, total_deaths, ( total_deaths/total_cases)*100 as DeathPercentage
+From PortfolioProjectCovid .. ['covid  deaths$']
+Where location like '%states%'
+--order by 1,2
+
+SELECT * FROM TotalCasesvsTotaldeaths
